@@ -1,0 +1,10 @@
+{
+  "name": "sit323-prac2p-node-server",
+  "description": "A Node.JS app created with Express",
+  "dependencies": {
+    "express": "^4.18.3"
+},
+  "scripts": {
+      "start": "node app.js"
+  }
+}
