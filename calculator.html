@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+       body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column; 
+        }
+
+        #calculatorForm {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculator</h1>
+    <form id="calculatorForm">
+        <label for="num1">Number 1:</label>
+        <input type="number" id="num1" name="num1" required>
+        <br>
+        <br>
+        <label for="num2">Number 2:</label>
+        <input type="number" id="num2" name="num2" required>
+        <br>
+        <br>
+        <label for="operation">Operation:</label>
+        <select id="operation" name="operation" required>
+            <option value="add">Add</option>
+            <option value="subtract">Subtract</option>
+            <option value="multiply">Multiply</option>
+            <option value="divide">Divide</option>
+        </select>
+        <br>
+        <br>
+        <button type="button" onclick="calculate()">Calculate</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        function calculate() {
+            const num1 = document.getElementById('num1').value;
+            const num2 = document.getElementById('num2').value;
+            const operation = document.getElementById('operation').value;
+
+            fetch(`http://localhost:3000/${operation}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ num1, num2 })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.hasOwnProperty('result')) {
+                    document.getElementById('result').innerText = `Result: ${data.result}`;
+                } else if (data.hasOwnProperty('error')) {
+                    document.getElementById('result').innerText = `Error: ${data.error}`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerText = 'Error occurred. Please try again.';
+            });
+        }
+    </script>
+</body>
+</html>
